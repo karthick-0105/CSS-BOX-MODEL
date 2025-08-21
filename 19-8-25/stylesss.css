@@ -1,9 +1,0 @@
-body {
-  font-family: "Poppins", sans-serif;
-  padding-top: 80px; /* Fix for fixed navbar */
-}
-
-.icon {
-  height: 2rem;
-  cursor: pointer;
-}
