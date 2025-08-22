@@ -1,0 +1,56 @@
+show databases;
+drop database It;
+create database IT;
+use IT;
+create table students(
+sid int primary key,
+sname varchar(30),
+smark int
+);
+insert into students values
+(1,"Adib",84),
+(2,"Karthick",98),
+(3,"Sakthi",67);
+show tables;
+desc students;
+select * from students;
+create table aiml(sid int primary key,sname varchar(30),smark int);
+insert into aiml values
+(4,"Iqhlas",76),
+(5,"Gopi",86);
+show tables;
+desc aiml;
+select * from aiml;
+update students
+set smark=76
+where sid=3;
+alter table students
+add sphno int;
+alter table aiml
+add smail varchar(30);
+select * from students;
+select * from aiml;
+update students 
+set sphno=938473032 
+where sid=2;
+update students 
+set sphno=974363772 
+where sid=1;
+update students 
+set sphno=993473312 
+where sid=3;
+update aiml 
+set smail="iqhlas2004@gmail.com"
+where sid=4;
+update aiml 
+set smail="gopi2004@gmail.com"
+where sid=5;
+select * from students;
+select * from aiml;
+alter table aiml 
+drop column smark;
+select * from students;
+select * from aiml;
+ 
+
+
