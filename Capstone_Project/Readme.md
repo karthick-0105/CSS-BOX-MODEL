@@ -8,13 +8,13 @@ This project is designed to replace manual hospital processes with a digital sol
 
 ## **📌 Project Overview**
 
-* Project Type: Java Full Stack Web Application
+* **Project Type:** Java Full Stack Web Application
 
-* Architecture: RESTful, Layered Architecture
+* **Architecture:** RESTful, Layered Architecture
 
-* Roles Supported: Admin, Doctor, Patient
+* **Roles Supported:** Admin, Doctor, Patient
 
-* Core Focus: Appointment management & hospital workflow automation
+* **Core Focus: **Appointment management & hospital workflow automation
 
 ## **✨ Key Features**
 
