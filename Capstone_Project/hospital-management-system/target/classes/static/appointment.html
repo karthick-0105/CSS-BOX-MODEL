@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Appointment - Hospital Management System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+        }
+
+        /* MODERN NAVBAR */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgb(0, 128, 255);
+            border-bottom: 2px solid #0052a3;
+            padding: 1rem 3rem;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+        }
+
+        .navbar-nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        .navbar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 3rem auto;
+            padding: 2rem;
+        }
+
+        .form-box {
+            background: white;
+            padding: 3rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .form-box h2 {
+            color: rgb(0, 128, 255);
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        select, input {
+            padding: 12px;
+            margin: 10px 0;
+            width: 100%;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: rgb(0, 128, 255);
+            box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
+        }
+
+        button {
+            padding: 12px 35px;
+            margin: 15px 0;
+            background: rgb(0, 128, 255);
+            border-bottom: 2px solid #0052a3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+
+        /* MOBILE MENU TOGGLE */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .navbar-brand {
+                font-size: 1.2rem;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .navbar-nav {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                gap: 0.5rem;
+                margin-top: 1rem;
+            }
+
+            .navbar-nav.active {
+                display: flex;
+            }
+
+            .navbar-nav a {
+                width: 100%;
+                text-align: center;
+                padding: 0.75rem;
+            }
+
+            .container {
+                padding: 1rem;
+                margin: 2rem auto;
+            }
+
+            .form-box {
+                padding: 2rem 1.5rem;
+            }
+
+            .form-box h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-brand {
+                font-size: 1rem;
+            }
+
+            .form-box {
+                padding: 1.5rem 1rem;
+            }
+
+            .form-box h2 {
+                font-size: 1.3rem;
+            }
+
+            select, input, button {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <a href="index.html" class="navbar-brand">Hospital Management</a>
+    <div class="menu-toggle" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div class="navbar-nav" id="navbarNav">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="departments.html">Departments</a>
+        <a href="appointment.html">Appointments</a>
+        <a href="appointments-list.html">My Appointments</a>
+    </div>
+</nav>
+
+<div class="container">
+<div class="form-box">
+<h2>Book Appointment</h2>
+
+<input id="patientId" type="number" placeholder="Patient ID" readonly><br>
+
+<input id="doctorId" type="number" placeholder="Doctor ID"><br>
+
+<input id="age" type="number" placeholder="Age" min="1" max="120"><br>
+
+<select id="gender">
+    <option value="">-- Select Gender --</option>
+    <option value="Male">Male</option>
+    <option value="Female">Female</option>
+    <option value="Other">Other</option>
+</select><br>
+
+<input id="date" type="date"><br>
+
+<!-- 🔥 FIXED SLOT DROPDOWN -->
+<select id="slot">
+    <option value="">-- Select Time Slot --</option>
+    <option value="9:00-9:30">9:00 - 9:30</option>
+    <option value="9:30-10:00">9:30 - 10:00</option>
+    <option value="10:00-10:30">10:00 - 10:30</option>
+    <option value="10:30-11:00">10:30 - 11:00</option>
+</select><br>
+
+<select id="priority">
+    <option value="NORMAL">Normal</option>
+    <option value="EMERGENCY">Emergency</option>
+</select><br>
+
+<button onclick="book()">Book Appointment</button>
+
+<script>
+// Auto-fill patient ID from login session
+const role = localStorage.getItem("role");
+const patientIdFromSession = localStorage.getItem("referenceId");
+
+// Check if patient is logged in
+if (!role || role !== "PATIENT") {
+    alert("Please login as a Patient to book an appointment.");
+    window.location.href = "login.html";
+} else if (!patientIdFromSession) {
+    alert("Patient ID not found. Please login again.");
+    window.location.href = "login.html";
+} else {
+    // Auto-fill patient ID
+    document.getElementById("patientId").value = patientIdFromSession;
+}
+
+function book() {
+
+    if (!slot.value) {
+        alert("Please select a time slot");
+        return;
+    }
+    
+    if (!age.value || age.value < 1 || age.value > 120) {
+        alert("Please enter a valid age (1-120)");
+        return;
+    }
+    
+    if (!gender.value) {
+        alert("Please select gender");
+        return;
+    }
+
+    fetch("/appointments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            appointmentDate: date.value,
+            slot: slot.value,
+            priority: priority.value,
+            patient: { 
+                patientId: patientId.value,
+                age: parseInt(age.value),
+                gender: gender.value
+            },
+            doctor: { doctorId: doctorId.value }
+        })
+    })
+    .then(res => {
+        if (!res.ok) {
+            return res.json().then(errorData => {
+                // Extract error message from JSON response
+                const errorMessage = errorData.message || errorData.error || "Failed to book appointment";
+                throw new Error(errorMessage);
+            });
+        }
+        return res.json();
+    })
+    .then(() => {
+        alert("Appointment booked (Pending approval)");
+        // Clear form (except patient ID which is readonly)
+        document.getElementById("doctorId").value = "";
+        document.getElementById("age").value = "";
+        document.getElementById("gender").value = "";
+        document.getElementById("date").value = "";
+        document.getElementById("slot").value = "";
+        document.getElementById("priority").value = "NORMAL";
+    })
+    .catch(err => {
+        alert("Error: " + err.message);
+        console.error("Error:", err);
+    });
+}
+
+// Mobile menu toggle
+function toggleMenu() {
+    const nav = document.getElementById("navbarNav");
+    nav.classList.toggle("active");
+}
+</script>
+
+</div>
+</div>
+
+</body>
+</html>

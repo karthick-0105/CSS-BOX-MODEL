@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Departments - Hospital Management System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+        }
+
+        /* MODERN NAVBAR */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgb(0, 128, 255);    
+            border-bottom: 2px solid #0052a3;
+            padding: 1rem 3rem;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+        }
+
+        .navbar-nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        .navbar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header-box {
+            background: white;
+            padding: 2rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .header-box h2 {
+            color: rgb(0, 128, 255);    
+            font-size: 2rem;
+        }
+
+        .departments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .dept-card {
+            background: white;
+            padding: 2rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .dept-card:hover {
+            border-color: rgb(0, 128, 255);    
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .dept-card h3 {
+            color: rgb(0, 128, 255);    
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .dept-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* MOBILE MENU TOGGLE */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .navbar-brand {
+                font-size: 1.2rem;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .navbar-nav {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                gap: 0.5rem;
+                margin-top: 1rem;
+            }
+
+            .navbar-nav.active {
+                display: flex;
+            }
+
+            .navbar-nav a {
+                width: 100%;
+                text-align: center;
+                padding: 0.75rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .departments-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <a href="index.html" class="navbar-brand">Hospital Management</a>
+    <div class="menu-toggle" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div class="navbar-nav" id="navbarNav">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="departments.html">Departments</a>
+        <a href="appointment.html">Book Appointment</a>
+        <a href="appointments-list.html">My Appointments</a>
+        <a href="find-doctor.html">Find Doctor</a>
+        <a href="#" onclick="scrollToFooter(); return false;">Contact</a>
+    </div>
+</nav>
+
+<div class="container">
+<div class="header-box">
+<h2>Hospital Departments</h2>
+</div>
+
+<div class="departments-grid">
+    <div class="dept-card">
+        <h3>Cardiology</h3>
+        <p>Specialized care for heart and cardiovascular diseases. Expert cardiologists available for consultation and treatment.</p>
+    </div>
+
+    <div class="dept-card">
+        <h3>Orthopedics</h3>
+        <p>Treatment for bone, joint, muscle, and ligament conditions. Advanced surgical and non-surgical options available.</p>
+    </div>
+
+    <div class="dept-card">
+        <h3>Pediatrics</h3>
+        <p>Comprehensive healthcare for infants, children, and adolescents. Child-friendly environment with expert pediatricians.</p>
+    </div>
+
+    <div class="dept-card">
+        <h3>Neurology</h3>
+        <p>Specialized care for disorders of the nervous system. Advanced diagnostic and treatment facilities.</p>
+    </div>
+
+    <div class="dept-card">
+        <h3>Gynecology</h3>
+        <p>Women's health services including reproductive health, obstetrics, and gynecological care.</p>
+    </div>
+
+    <div class="dept-card">
+        <h3>Dermatology</h3>
+        <p>Treatment for skin, hair, and nail conditions. Expert dermatologists with modern treatment options.</p>
+    </div>
+
+    <div class="dept-card">
+        <h3>General Medicine</h3>
+        <p>Primary healthcare services for common illnesses and preventive care. Experienced general physicians.</p>
+    </div>
+
+    <div class="dept-card">
+        <h3>Emergency Medicine</h3>
+        <p>24/7 emergency care services. Fully equipped emergency department for urgent medical needs.</p>
+    </div>
+</div>
+</div>
+
+<script>
+// Check if patient is logged in
+const role = localStorage.getItem("role");
+if (!role || role !== "PATIENT") {
+    alert("Please login as a Patient to view departments.");
+    window.location.href = "login.html";
+}
+
+// Scroll to footer
+function scrollToFooter() {
+    const footer = document.getElementById("footer");
+    if (footer) {
+        footer.scrollIntoView({ behavior: "smooth" });
+    }
+}
+
+function toggleMenu() {
+    const nav = document.getElementById("navbarNav");
+    nav.classList.toggle("active");
+}
+</script>
+
+<!-- FOOTER -->
+<footer id="footer" style="background: #0066cc; color: white; text-align: center; padding: 2rem; margin-top: 3rem;">
+    <h3>Contact Us</h3>
+    <p>Address: City Hospital, Main Road</p>
+    <p>Phone: +91 98765 43210</p>
+    <p>Emergency: 108</p>
+    <p>Email: info@hospital.com</p>
+</footer>
+
+</body>
+</html>
+

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>About Us - Hospital Management System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        /* MODERN NAVBAR */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgb(0, 128, 255);
+            border-bottom: 2px solid #0052a3;
+            padding: 1rem 3rem;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+        }
+
+        .navbar-nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        .navbar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-login, .btn-logout {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1.5rem;
+            border-radius: 4px;
+            border: 2px solid white;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login:hover, .btn-logout:hover {
+            background: white;
+            color: rgb(0, 128, 255);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .about-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .about-header h1 {
+            font-size: 2.5rem;
+            color: rgb(0, 128, 255);
+            margin-bottom: 1rem;
+        }
+
+        .about-header p {
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        .content-section {
+            background: white;
+            padding: 2.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .content-section h2 {
+            color: rgb(0, 128, 255);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .content-section p {
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 1rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .service-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid rgb(0, 128, 255);
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .service-card h3 {
+            color: rgb(0, 128, 255);
+            margin-bottom: 0.5rem;
+        }
+
+        .service-card p {
+            color: #666;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        footer {
+            background: rgb(0, 128, 255);
+            border-bottom: 2px solid rgb(0, 128, 255);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        footer p {
+            margin: 0.5rem 0;
+            color: white;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .navbar-brand {
+                font-size: 1.2rem;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .navbar-nav, .navbar-right {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                gap: 0.5rem;
+                margin-top: 1rem;
+            }
+
+            .navbar-nav.active, .navbar-right.active {
+                display: flex;
+            }
+
+            .navbar-nav a, .navbar-right a {
+                width: 100%;
+                text-align: center;
+                padding: 0.75rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .about-header h1 {
+                font-size: 2rem;
+            }
+
+            .content-section {
+                padding: 1.5rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <a href="index.html" class="navbar-brand">Hospital Management</a>
+    <div class="menu-toggle" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div class="navbar-nav" id="navbarNav">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="departments.html">Departments</a>
+        <a href="appointment.html">Appointments</a>
+        <a href="#" onclick="scrollToFooter(); return false;">Contact</a>
+    </div>
+    <div class="navbar-right" id="navbarRight">
+        <a href="login.html" class="btn-login" id="loginBtn">Login</a>
+        <a href="#" class="btn-logout" id="logoutBtn" style="display:none;" onclick="logout()">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="about-header">
+        <h1>About Our Hospital</h1>
+        <p>Committed to providing exceptional healthcare services with compassion and excellence</p>
+    </div>
+
+    <div class="content-section">
+        <h2>Welcome to Our Hospital</h2>
+        <p>
+            Our hospital is a leading healthcare institution dedicated to providing comprehensive medical care 
+            to our community. With state-of-the-art facilities and a team of experienced healthcare professionals, 
+            we strive to deliver the highest quality medical services with compassion and excellence.
+        </p>
+        <p>
+            Established with a vision to make quality healthcare accessible to everyone, we have been serving 
+            our community for years, building trust and delivering exceptional patient care. Our commitment 
+            to excellence has made us a preferred choice for medical care in the region.
+        </p>
+    </div>
+
+    <div class="content-section">
+        <h2>Our Mission</h2>
+        <p>
+            To provide accessible, high-quality healthcare services that improve the health and well-being 
+            of our community. We are committed to delivering patient-centered care with integrity, compassion, 
+            and respect for all individuals.
+        </p>
+    </div>
+
+    <div class="content-section">
+        <h2>Our Vision</h2>
+        <p>
+            To be recognized as a premier healthcare institution that sets the standard for excellence in 
+            medical care, innovation, and patient satisfaction. We aim to continuously improve our services 
+            and expand our capabilities to meet the evolving healthcare needs of our community.
+        </p>
+    </div>
+
+    <div class="content-section">
+        <h2>Our Services</h2>
+        <p>We offer a comprehensive range of medical services to meet all your healthcare needs:</p>
+        
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>Emergency Care</h3>
+                <p>24/7 emergency services with rapid response and expert medical care for critical situations.</p>
+            </div>
+            <div class="service-card">
+                <h3>General Medicine</h3>
+                <p>Comprehensive primary care services for routine check-ups, preventive care, and treatment of common illnesses.</p>
+            </div>
+            <div class="service-card">
+                <h3>Specialized Departments</h3>
+                <p>Expert care across multiple specialties including Cardiology, Neurology, Orthopedics, Pediatrics, and more.</p>
+            </div>
+            <div class="service-card">
+                <h3>Appointment Booking</h3>
+                <p>Easy online appointment scheduling system to book consultations with our expert doctors at your convenience.</p>
+            </div>
+            <div class="service-card">
+                <h3>Patient Management</h3>
+                <p>Comprehensive patient record management system ensuring seamless care coordination and medical history tracking.</p>
+            </div>
+            <div class="service-card">
+                <h3>Doctor Directory</h3>
+                <p>Access to our team of experienced and qualified doctors across various medical specialties.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>Why Choose Us</h2>
+        <p>
+            <strong>Expert Medical Team:</strong> Our hospital is staffed with highly qualified and experienced 
+            doctors, nurses, and healthcare professionals who are dedicated to providing the best possible care.
+        </p>
+        <p>
+            <strong>Advanced Technology:</strong> We utilize modern medical equipment and technology to ensure 
+            accurate diagnosis and effective treatment.
+        </p>
+        <p>
+            <strong>Patient-Centered Care:</strong> We prioritize patient comfort and satisfaction, ensuring 
+            that every individual receives personalized attention and care.
+        </p>
+        <p>
+            <strong>Easy Access:</strong> Our online platform makes it easy to book appointments, view your 
+            medical records, and access healthcare services from the comfort of your home.
+        </p>
+        <p>
+            <strong>Comprehensive Services:</strong> From routine check-ups to specialized treatments, we 
+            offer a wide range of medical services to address all your healthcare needs.
+        </p>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer id="footer">
+    <h3>Contact Us</h3>
+    <p>Address: City Hospital, Main Road</p>
+    <p>Phone: +91 98765 43210</p>
+    <p>Emergency: 108</p>
+    <p>Email: info@hospital.com</p>
+</footer>
+
+<script>
+// Check if user is logged in
+let role = localStorage.getItem("role");
+if (role) {
+    document.getElementById("loginBtn").style.display = "none";
+    document.getElementById("logoutBtn").style.display = "inline-block";
+}
+
+function logout() {
+    localStorage.clear();
+    window.location.href = "login.html";
+}
+
+function scrollToFooter() {
+    document.getElementById("footer").scrollIntoView({ behavior: "smooth" });
+}
+
+function toggleMenu() {
+    const nav = document.getElementById("navbarNav");
+    const right = document.getElementById("navbarRight");
+    nav.classList.toggle("active");
+    right.classList.toggle("active");
+}
+</script>
+
+</body>
+</html>
+

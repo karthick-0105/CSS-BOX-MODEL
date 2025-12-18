@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patient Registration - Hospital Management System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* BASIC NAVBAR */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgb(0, 128, 255);    
+            padding: 1rem 2rem;
+            color: white;
+            border-bottom: 2px solid #0052a3;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+        }
+
+        .navbar-nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        .navbar a:hover {
+            background: #0052a3;
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .box {
+            background: white;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .box h2 {
+            color: rgb(0, 128, 255);    
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: rgb(0, 128, 255);    
+            box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0 10px 0;
+            background: rgb(0, 128, 255);    
+            color: white;
+            border: 1px solid rgb(0, 128, 255);    
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            background: #0052a3;
+            border-color: #0052a3;
+        }
+
+        a {
+            display: block;
+            margin-top: 15px;
+            color: rgb(0, 128, 255);    
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .navbar-brand {
+                font-size: 1.2rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .box {
+                padding: 30px 20px;
+            }
+
+            .box h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-brand {
+                font-size: 1rem;
+            }
+
+            .box {
+                padding: 25px 15px;
+            }
+
+            .box h2 {
+                font-size: 1.3rem;
+            }
+
+            input, button {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <a href="index.html" class="navbar-brand">Hospital Management</a>
+    <div class="navbar-nav">
+        <a href="index.html">Home</a>
+        <a href="login.html">Login</a>
+    </div>
+</nav>
+
+<div class="container">
+<div class="box">
+<h2>Patient Registration</h2>
+
+<input id="username" placeholder="Username" required>
+<input id="password" type="password" placeholder="Password" required>
+<input id="age" type="number" placeholder="Age" min="1" max="120" required>
+<select id="gender" required>
+    <option value="">-- Select Gender --</option>
+    <option value="Male">Male</option>
+    <option value="Female">Female</option>
+    <option value="Other">Other</option>
+</select>
+<input id="phone" type="tel" placeholder="Phone Number" required>
+
+<button onclick="register()">Register</button>
+
+<a href="login.html">Already have an account? Login</a>
+
+<script>
+function register() {
+    // Validation
+    if (!username.value || !password.value || !age.value || !gender.value || !phone.value) {
+        alert("Please fill in all fields");
+        return;
+    }
+    
+    if (age.value < 1 || age.value > 120) {
+        alert("Please enter a valid age (1-120)");
+        return;
+    }
+    
+    if (phone.value.trim() === "") {
+        alert("Please enter a valid phone number");
+        return;
+    }
+    
+    fetch("/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            username: username.value.trim(),
+            password: password.value,
+            age: parseInt(age.value),
+            gender: gender.value,
+            phone: phone.value.trim()
+        })
+    })
+    .then(res => {
+        if (!res.ok) {
+            return res.json().then(errorData => {
+                throw new Error(errorData.message || "Registration failed");
+            });
+        }
+        return res.json();
+    })
+    .then(() => {
+        alert("Registration successful");
+        location.href = "login.html";
+    })
+    .catch(err => {
+        alert("Error: " + err.message);
+    });
+}
+</script>
+
+</div>
+</div>
+
+</body>
+</html>

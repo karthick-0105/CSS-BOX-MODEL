@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Doctor Dashboard - Hospital Management System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+        }
+
+        /* MODERN NAVBAR */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgb(0, 128, 255);    
+            border-bottom: 2px solid #0052a3;
+            padding: 1rem 3rem;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+        }
+
+        .navbar button {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1.5rem;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            cursor: pointer;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .navbar button:hover {
+            background: white;
+            color: rgb(0, 128, 255);    
+        }
+
+        .navbar-nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .navbar-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        .navbar-nav a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-header {
+            background: white;
+            padding: 2rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-header h2 {
+            color: rgb(0, 128, 255);    
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background: rgb(0, 128, 255);    
+            border-bottom: 2px solid #0052a3;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        button {
+            padding: 8px 16px;
+            margin: 3px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-accept {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-accept:hover {
+            background: #218838;
+        }
+
+        .btn-reject {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-reject:hover {
+            background: #c82333;
+        }
+
+        .approved { background-color: #d4edda; }
+        .rejected { background-color: #f8d7da; }
+
+        /* Availability Toggle Styles */
+        #availabilityToggle:checked + #availabilitySlider {
+            background-color: #28a745;
+        }
+
+        #availabilityToggle:checked + #availabilitySlider::before {
+            transform: translateX(30px);
+        }
+
+        #availabilitySlider::before {
+            content: "";
+            position: absolute;
+            height: 24px;
+            width: 24px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        #availabilityToggle:checked ~ #availabilityText {
+            content: "ON";
+        }
+
+        .btn-action {
+            padding: 10px 20px;
+            background: rgb(0, 128, 255);    
+            color: white;
+            border: 1px solid rgb(0, 128, 255);    
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
+
+        .btn-action:hover {
+            background: #0052a3;
+            border-color: #0052a3;
+        }
+
+        /* TABLE WRAPPER FOR HORIZONTAL SCROLL */
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .navbar-brand {
+                font-size: 1.2rem;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .navbar-nav {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                gap: 0.5rem;
+                margin-top: 1rem;
+            }
+
+            .navbar-nav.active {
+                display: flex;
+            }
+
+            .navbar-nav a, .navbar-nav button {
+                width: 100%;
+                text-align: center;
+                padding: 0.75rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .dashboard-header {
+                padding: 1.5rem;
+            }
+
+            .dashboard-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .table-wrapper {
+                margin: 1rem -1rem;
+            }
+
+            table {
+                font-size: 0.85rem;
+                min-width: 600px;
+            }
+
+            th, td {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .btn-complete, .btn-reject {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+                display: block;
+                width: 100%;
+                margin: 3px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-brand {
+                font-size: 1rem;
+            }
+
+            .dashboard-header h2 {
+                font-size: 1.3rem;
+            }
+
+            table {
+                font-size: 0.75rem;
+                min-width: 500px;
+            }
+
+            th, td {
+                padding: 0.5rem 0.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <a href="doctor-dashboard.html" class="navbar-brand">Doctor Dashboard</a>
+    <div class="menu-toggle" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div class="navbar-nav" id="navbarNav">
+        <button onclick="logout()">Logout</button>
+    </div>
+</nav>
+
+<div class="container">
+<div class="dashboard-header">
+<h2>Doctor Dashboard</h2>
+<div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; margin-top: 1rem;">
+    <button class="btn-action" onclick="loadAppointments()">Refresh Appointments</button>
+    <div style="display: flex; align-items: center; gap: 0.5rem; background: white; padding: 0.75rem 1rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+        <label for="availabilityToggle" style="font-weight: 600; color: #333; margin: 0;">Availability:</label>
+        <label style="position: relative; display: inline-block; width: 60px; height: 30px; margin: 0; cursor: pointer;">
+            <input type="checkbox" id="availabilityToggle" onchange="toggleAvailability()" style="opacity: 0; width: 0; height: 0;">
+            <span id="availabilitySlider" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; border-radius: 30px; transition: 0.3s;"></span>
+            <span id="availabilityText" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 0.75rem; font-weight: 600; color: white; transition: 0.3s;">OFF</span>
+        </label>
+    </div>
+</div>
+</div>
+
+<div class="table-wrapper">
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Slot</th>
+            <th>Patient</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+</table>
+</div>
+
+<script>
+// 🔐 ROLE PROTECTION
+let role = localStorage.getItem("role");
+let doctorId = localStorage.getItem("referenceId");
+
+if (role !== "DOCTOR") {
+    alert("Access Denied. Please login as a Doctor.");
+    window.location.href = "login.html";
+}
+
+function loadAppointments() {
+    // Get fresh doctorId from localStorage
+    const currentDoctorId = localStorage.getItem("referenceId");
+    
+    // If doctorId is not set, use fallback method
+    if (!currentDoctorId || currentDoctorId === "null" || currentDoctorId === "undefined") {
+        console.warn("Doctor ID not found in session, using fallback method");
+        loadAppointmentsFallback();
+        return;
+    }
+    
+    const doctorIdNum = Number(currentDoctorId);
+    
+    if (isNaN(doctorIdNum) || doctorIdNum <= 0) {
+        console.warn("Invalid Doctor ID, using fallback method");
+        loadAppointmentsFallback();
+        return;
+    }
+    
+    // Use the doctor-specific endpoint for better filtering
+    fetch(`/appointments/doctor/${doctorIdNum}`)
+        .then(res => {
+            if (!res.ok) {
+                // Try to get error message from response
+                return res.text().then(text => {
+                    try {
+                        const errorData = JSON.parse(text);
+                        throw new Error(errorData.message || "Failed to load appointments");
+                    } catch (e) {
+                        throw new Error(text || "Failed to load appointments");
+                    }
+                });
+            }
+            return res.json();
+        })
+        .then(data => {
+            let rows = document.getElementById("rows");
+            rows.innerHTML = "";
+
+            if (!data || !Array.isArray(data)) {
+                rows.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 2rem; color: #666;">
+                            No appointments found.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            // Show all appointments assigned to this doctor (APPROVED, ACCEPTED, REJECTED_BY_DOCTOR)
+            const allAppointments = data.filter(a => 
+                a && (a.status === "APPROVED" || a.status === "ACCEPTED" || a.status === "REJECTED_BY_DOCTOR")
+            );
+
+            if (allAppointments.length === 0) {
+                rows.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 2rem; color: #666;">
+                            No appointments assigned to you.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            allAppointments.forEach(a => {
+                const isApproved = a.status === "APPROVED";
+                const statusClass = a.status === "ACCEPTED" ? "approved" : (a.status === "REJECTED_BY_DOCTOR" ? "rejected" : "");
+                rows.innerHTML += `
+                    <tr class="${statusClass}">
+                        <td>${a.appointmentId}</td>
+                        <td>${a.appointmentDate}</td>
+                        <td>${a.slot}</td>
+                        <td>${a.patient.name}</td>
+                        <td>${a.status}</td>
+                        <td>
+                            ${isApproved ? `
+                                <button class="btn-accept" onclick="acceptAppointment(${a.appointmentId})">Accept</button>
+                                <button class="btn-reject" onclick="rejectAppointment(${a.appointmentId})">Reject</button>
+                            ` : `
+                                <span style="color: #666; font-style: italic;">No actions available</span>
+                            `}
+                        </td>
+                    </tr>
+                `;
+            });
+        })
+        .catch(err => {
+            console.error("Error loading appointments:", err);
+            // Fallback: try fetching all appointments and filter client-side
+            console.log("Trying fallback method...");
+            loadAppointmentsFallback();
+        });
+}
+
+// Fallback method: fetch all appointments and filter client-side
+function loadAppointmentsFallback() {
+    const currentDoctorId = localStorage.getItem("referenceId");
+    const doctorIdNum = currentDoctorId ? Number(currentDoctorId) : null;
+    
+    fetch(`/appointments`)
+        .then(res => res.json())
+        .then(data => {
+            let rows = document.getElementById("rows");
+            rows.innerHTML = "";
+            
+            // If we have a doctor ID, filter by it; otherwise show all appointments
+            let allAppointments;
+            if (doctorIdNum && !isNaN(doctorIdNum) && doctorIdNum > 0) {
+                allAppointments = data.filter(a => 
+                    a && a.doctor && 
+                    Number(a.doctor.doctorId) === doctorIdNum && 
+                    (a.status === "APPROVED" || a.status === "ACCEPTED" || a.status === "REJECTED_BY_DOCTOR")
+                );
+            } else {
+                // If no doctor ID, show message
+                rows.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 2rem; color: #666;">
+                            Doctor ID not configured. Please contact administrator to set your doctor ID.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            if (allAppointments.length === 0) {
+                rows.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 2rem; color: #666;">
+                            No appointments assigned to you.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            allAppointments.forEach(a => {
+                const isApproved = a.status === "APPROVED";
+                const statusClass = a.status === "ACCEPTED" ? "approved" : (a.status === "REJECTED_BY_DOCTOR" ? "rejected" : "");
+                rows.innerHTML += `
+                    <tr class="${statusClass}">
+                        <td>${a.appointmentId}</td>
+                        <td>${a.appointmentDate}</td>
+                        <td>${a.slot}</td>
+                        <td>${a.patient.name}</td>
+                        <td>${a.status}</td>
+                        <td>
+                            ${isApproved ? `
+                                <button class="btn-accept" onclick="acceptAppointment(${a.appointmentId})">Accept</button>
+                                <button class="btn-reject" onclick="rejectAppointment(${a.appointmentId})">Reject</button>
+                            ` : `
+                                <span style="color: #666; font-style: italic;">No actions available</span>
+                            `}
+                        </td>
+                    </tr>
+                `;
+            });
+        })
+        .catch(fallbackErr => {
+            console.error("Fallback also failed:", fallbackErr);
+            let rows = document.getElementById("rows");
+            rows.innerHTML = `
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 2rem; color: #dc3545;">
+                        Failed to load appointments. Please check your connection and try again.
+                    </td>
+                </tr>
+            `;
+        });
+}
+
+// Load doctor availability on page load
+function loadDoctorAvailability() {
+    const doctorId = localStorage.getItem("referenceId");
+    if (!doctorId || doctorId === "null" || doctorId === "undefined") {
+        return;
+    }
+    
+    fetch(`/doctors`)
+        .then(res => res.json())
+        .then(doctors => {
+            const currentDoctor = doctors.find(d => d.doctorId == doctorId);
+            if (currentDoctor) {
+                const toggle = document.getElementById("availabilityToggle");
+                const text = document.getElementById("availabilityText");
+                toggle.checked = currentDoctor.available;
+                text.textContent = currentDoctor.available ? "ON" : "OFF";
+                updateToggleStyle();
+            }
+        })
+        .catch(err => console.error("Error loading doctor availability:", err));
+}
+
+function updateToggleStyle() {
+    const toggle = document.getElementById("availabilityToggle");
+    const slider = document.getElementById("availabilitySlider");
+    const text = document.getElementById("availabilityText");
+    
+    if (toggle.checked) {
+        slider.style.backgroundColor = "#28a745";
+        text.textContent = "ON";
+    } else {
+        slider.style.backgroundColor = "#ccc";
+        text.textContent = "OFF";
+    }
+}
+
+function toggleAvailability() {
+    const doctorId = localStorage.getItem("referenceId");
+    if (!doctorId || doctorId === "null" || doctorId === "undefined") {
+        alert("Doctor ID not found. Please contact administrator.");
+        return;
+    }
+    
+    const toggle = document.getElementById("availabilityToggle");
+    const newAvailability = toggle.checked;
+    
+    fetch(`/doctors/${doctorId}/availability?available=${newAvailability}`, {
+        method: "PUT"
+    })
+    .then(res => {
+        if (!res.ok) {
+            return res.json().then(errorData => {
+                throw new Error(errorData.message || "Failed to update availability");
+            });
+        }
+        return res.json();
+    })
+    .then(() => {
+        updateToggleStyle();
+        alert(`Availability updated to ${newAvailability ? "Available" : "Unavailable"}`);
+    })
+    .catch(err => {
+        alert("Error: " + err.message);
+        // Revert toggle on error
+        toggle.checked = !newAvailability;
+        updateToggleStyle();
+    });
+}
+
+// Auto-load appointments when page loads
+// Add a small delay to ensure DOM is ready
+setTimeout(() => {
+    loadAppointments();
+    loadDoctorAvailability();
+}, 100);
+
+function acceptAppointment(id) {
+    if (!confirm("Are you sure you want to accept this appointment?")) {
+        return;
+    }
+    
+    fetch(`/doctors/appointments/accept/${id}`, { method: "PUT" })
+        .then(res => {
+            if (!res.ok) {
+                return res.json().then(errorData => {
+                    throw new Error(errorData.message || "Failed to accept appointment");
+                });
+            }
+            alert("Appointment accepted successfully!");
+            loadAppointments(); // Reload appointments instead of full page reload
+        })
+        .catch(err => {
+            alert("Error: " + err.message);
+        });
+}
+
+function rejectAppointment(id) {
+    let reason = prompt("Enter reason for rejection/cancellation:");
+    if (!reason || reason.trim() === "") {
+        alert("Rejection reason is required");
+        return;
+    }
+
+    if (!confirm("Are you sure you want to reject this appointment?")) {
+        return;
+    }
+
+    fetch(`/doctors/appointments/reject/${id}?reason=${encodeURIComponent(reason)}`, {
+        method: "PUT"
+    })
+    .then(res => {
+        if (!res.ok) {
+            return res.json().then(errorData => {
+                throw new Error(errorData.message || "Failed to reject appointment");
+            });
+        }
+        alert("Appointment rejected successfully!");
+        loadAppointments(); // Reload appointments instead of full page reload
+    })
+    .catch(err => {
+        alert("Error: " + err.message);
+    });
+}
+
+function toggleMenu() {
+    const nav = document.getElementById("navbarNav");
+    nav.classList.toggle("active");
+}
+
+function logout() {
+    localStorage.clear();
+    location.href = "index.html";
+}
+</script>
+
+</div>
+
+</body>
+</html>

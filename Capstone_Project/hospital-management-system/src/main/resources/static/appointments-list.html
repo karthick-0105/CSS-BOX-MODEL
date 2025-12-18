@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Appointments List - Hospital Management System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+        }
+
+        /* BASIC NAVBAR */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgb(0, 128, 255);    
+            padding: 1rem 2rem;
+            color: white;
+            border-bottom: 2px solid #0052a3;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+        }
+
+        .navbar-nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        .navbar a:hover {
+            background: #0052a3;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header-box {
+            background: white;
+            padding: 2rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header-box h2 {
+            color: rgb(0, 128, 255);
+            font-size: 1.8rem;
+        }
+
+        .btn-load {
+            padding: 10px 20px;
+            background: rgb(0, 128, 255);    
+            color: white;
+            border: 1px solid rgb(0, 128, 255);
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
+
+        .btn-load:hover {
+            background: #0052a3;
+            border-color: #0052a3;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background: rgb(0, 128, 255);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .emergency {
+            background-color: #ffcccc;
+            font-weight: 600;
+        }
+
+        .status-accepted {
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .status-rejected {
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        .status-approved {
+            color: #17a2b8;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            color: #ffc107;
+            font-weight: 600;
+        }
+
+        /* TABLE WRAPPER FOR HORIZONTAL SCROLL */
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* MOBILE MENU TOGGLE */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .navbar-brand {
+                font-size: 1.2rem;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .navbar-nav {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                gap: 0.5rem;
+                margin-top: 1rem;
+            }
+
+            .navbar-nav.active {
+                display: flex;
+            }
+
+            .navbar-nav a {
+                width: 100%;
+                text-align: center;
+                padding: 0.75rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .header-box {
+                padding: 1.5rem;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-box h2 {
+                font-size: 1.5rem;
+            }
+
+            .btn-load {
+                width: 100%;
+            }
+
+            .table-wrapper {
+                margin: 1rem -1rem;
+            }
+
+            table {
+                font-size: 0.85rem;
+                min-width: 600px;
+            }
+
+            th, td {
+                padding: 0.75rem 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-brand {
+                font-size: 1rem;
+            }
+
+            .header-box h2 {
+                font-size: 1.3rem;
+            }
+
+            table {
+                font-size: 0.75rem;
+                min-width: 500px;
+            }
+
+            th, td {
+                padding: 0.5rem 0.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <a href="index.html" class="navbar-brand">Hospital Management</a>
+    <div class="menu-toggle" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div class="navbar-nav" id="navbarNav">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="departments.html">Departments</a>
+        <a href="appointment.html">Book Appointment</a>
+        <a href="appointments-list.html">My Appointments</a>
+    </div>
+</nav>
+
+<div class="container">
+<div class="header-box">
+<h2>My Appointments</h2>
+<button class="btn-load" onclick="loadAppointments()">Load Appointments</button>
+</div>
+
+<div class="table-wrapper">
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Slot</th>
+            <th>Doctor</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Remarks</th>
+        </tr>
+    </thead>
+    <tbody id="appointmentsBody"></tbody>
+</table>
+</div>
+
+<script>
+// 🔐 PATIENT AUTHENTICATION CHECK
+const role = localStorage.getItem("role");
+const patientId = localStorage.getItem("referenceId");
+
+// Check if patient is logged in
+if (!role || role !== "PATIENT") {
+    alert("Access Denied. Please login as a Patient to view your appointments.");
+    window.location.href = "login.html";
+} else if (!patientId) {
+    alert("Patient ID not found. Please login again.");
+    window.location.href = "login.html";
+}
+
+function loadAppointments() {
+    // Double check authentication before loading
+    const currentRole = localStorage.getItem("role");
+    const currentPatientId = localStorage.getItem("referenceId");
+    
+    if (!currentRole || currentRole !== "PATIENT" || !currentPatientId) {
+        alert("Please login as a Patient to view your appointments.");
+        window.location.href = "login.html";
+        return;
+    }
+
+    fetch("/appointments")
+        .then(res => res.json())
+        .then(data => {
+            let body = document.getElementById("appointmentsBody");
+            body.innerHTML = "";
+
+            // Filter appointments to show only those belonging to the logged-in patient
+            const patientAppointments = data.filter(a => 
+                a.patient && a.patient.patientId == currentPatientId
+            );
+
+            if (patientAppointments.length === 0) {
+                body.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 2rem; color: #666;">
+                            No appointments found. Book your first appointment!
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            patientAppointments.forEach(a => {
+                // Determine status display
+                let statusDisplay = a.status;
+                let statusClass = '';
+                if (a.status === 'ACCEPTED') {
+                    statusClass = 'status-accepted';
+                    statusDisplay = 'Accepted by Doctor';
+                } else if (a.status === 'REJECTED_BY_DOCTOR') {
+                    statusClass = 'status-rejected';
+                    statusDisplay = 'Rejected by Doctor';
+                } else if (a.status === 'APPROVED') {
+                    statusClass = 'status-approved';
+                    statusDisplay = 'Approved by Admin (Waiting for Doctor)';
+                } else if (a.status === 'REJECTED') {
+                    statusClass = 'status-rejected';
+                    statusDisplay = 'Rejected by Admin';
+                } else if (a.status === 'PENDING') {
+                    statusClass = 'status-pending';
+                    statusDisplay = 'Pending Admin Approval';
+                }
+                
+                let remarks = a.rejectionReason || '-';
+                if (a.status === 'ACCEPTED') {
+                    remarks = 'Appointment confirmed';
+                }
+                
+                let row = `
+                    <tr class="${a.priority === 'EMERGENCY' ? 'emergency' : ''}">
+                        <td>${a.appointmentId}</td>
+                        <td>${a.appointmentDate}</td>
+                        <td>${a.slot || '-'}</td>
+                        <td>${a.doctor.name}</td>
+                        <td>${a.priority}</td>
+                        <td class="${statusClass}">${statusDisplay}</td>
+                        <td>${remarks}</td>
+                    </tr>
+                `;
+                body.innerHTML += row;
+            });
+        })
+        .catch(() => alert("Failed to load appointments"));
+}
+
+// Mobile menu toggle
+function toggleMenu() {
+    const nav = document.getElementById("navbarNav");
+    nav.classList.toggle("active");
+}
+
+// Auto-load appointments when page loads (only if patient is logged in)
+if (role === "PATIENT" && patientId) {
+    loadAppointments();
+}
+</script>
+
+</div>
+
+</body>
+</html>
