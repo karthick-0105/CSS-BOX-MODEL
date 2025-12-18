@@ -14,7 +14,7 @@ This project is designed to replace manual hospital processes with a digital sol
 
 * **Roles Supported:** Admin, Doctor, Patient
 
-* **Core Focus: **Appointment management & hospital workflow automation
+* **Core Focus:** Appointment management & hospital workflow automation
 
 ## **✨ Key Features**
 
